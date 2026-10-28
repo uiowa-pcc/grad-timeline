@@ -100,7 +100,7 @@ input[type="checkbox"]:focus-visible{outline:3px solid #3473b4;outline-offset:3p
 <section id="setup" class="card"><h2>Let's make your plan</h2><p class="small">About 2 minutes. You can change your answers anytime.</p>
 <div class="grid"><div class="field"><label for="kind">What kind of program are you considering?</label><select id="kind"><option value="unsure">Still exploring / not sure</option><option value="masters">Master's or graduate certificate</option><option value="research">Research master's or PhD</option><option value="professional">Professional program (law, health, business, etc.)</option><option value="creative">Creative or portfolio-based program</option></select></div><div class="field"><label for="deadline">When is your earliest application deadline?</label><input type="date" id="deadline"><div class="hint">A best estimate is fine. If you're unsure, leave this blank for starter dates.</div></div></div>
 <div class="field"><fieldset><legend>What have you already started?</legend><div class="chips" id="started"><button type="button" class="chip" data-v="programs" aria-pressed="false">Found possible programs</button><button type="button" class="chip" data-v="requirements" aria-pressed="false">Checked requirements</button><button type="button" class="chip" data-v="recommenders" aria-pressed="false">Identified recommenders</button><button type="button" class="chip" data-v="statement" aria-pressed="false">Started statement</button><button type="button" class="chip" data-v="cv" aria-pressed="false">Have résumé/CV draft</button></div></fieldset></div><div class="actions"><button id="build" class="action primary">Choose my timeline steps</button></div></section>
-<section id="choose" class="card hidden"><div class="eyebrow">Step 2 of 2</div><h2>What belongs on your timeline?</h2><p class="small">We've selected common preparation steps. Uncheck anything that doesn't fit your plans. You can change these later.</p><div id="picksteps" class="picksteps"></div>
+<section id="choose" class="card hidden"><div class="eyebrow">Step 2 of 2</div><h2>What belongs on your timeline?</h2><p class="small">We've checked steps that may fit your program type. Add or remove any to make this plan yours.</p><div id="picksteps" class="picksteps"></div>
 <div class="field"><label for="newstep">Add your own step</label><div class="addrow"><input type="text" id="newstep" maxlength="130" placeholder="For example: Attend a program information session"><button id="addstep" type="button" class="action">Add step</button></div><div class="hint">You can set its target date on your timeline.</div></div><div id="customsteps" class="customsteps"></div><p id="chooseerror" class="small error hidden" role="alert">Choose at least one step to build your timeline.</p><div class="actions"><button id="backsetup" type="button" class="action">Back</button><button id="finish" type="button" class="action primary">Create my timeline</button></div></section>
 <section id="result" class="hidden"><div class="resulthead"><div><div class="eyebrow">Your working plan</div><h2 id="planname"></h2></div><div class="result-actions"><button id="edit" class="action">Edit answers</button><button id="editsteps" class="action">Edit steps</button></div></div><div class="card"><strong id="count"></strong><div class="bar"><div id="bar"></div><div id="printMeta" class="print-meta print-only"></div></div><div class="notice" id="notice"></div><div class="focus"><h3>Your first focus</h3><ul id="focus"></ul></div><div class="sectionhead"><div><h3>Your timeline</h3><p class="small">Dates are suggestions. Set your own target date for any step; the timeline will reorder automatically.</p></div><button class="action" id="defaults" type="button">Reset to suggested dates</button></div><div id="timeline" class="timeline"></div><details class="checklist" id="checklist"><summary><span>Detailed step-by-step guide <span class="sub">Expand for tips and checkboxes</span></span></summary><div id="phases" class="phases"></div></details><div class="field"><label for="notes">My notes or questions to follow up on</label><textarea id="notes" placeholder="Example: Ask an advisor about prerequisites; check funding for Program A"></textarea></div><div id="printNotes" class="print-notes print-only"></div><p class="print-footer print-only">Planning dates are flexible. Always verify official requirements and deadlines with each program.</p><div class="actions"><button class="action primary" id="print">Print / save as PDF</button><button class="action" id="copy">Copy formatted plan</button><button class="action" id="reset">Start over</button></div></div>
 <div class="card resourcecard"><h3>Helpful resources when you're ready</h3><div class="resources"><a href="https://careers.uiowa.edu/career-prep/graduate-professional-school" target="_blank" rel="noopener">UIowa grad school guide ↗</a><a href="https://careers.uiowa.edu/resumes-cover-letters/curriculum-vitae-cv" target="_blank" rel="noopener">CV guidance ↗</a><a href="https://writingcenter.uiowa.edu/" target="_blank" rel="noopener">UI Writing Center ↗</a><a href="https://career.berkeley.edu/get-into-grad-school/graduate-school/grad-school-letters-of-recommendation/" target="_blank" rel="noopener">Recommendation tips ↗</a></div><p class="fine">Planning targets are flexible, not official deadlines. Verify each program's application, funding, testing, and document requirements. This tool is part of your Learning Hub preparation; your entries are stored only in this browser, not submitted as an ICON assignment or sent to the Career Center.</p></div></section></main>
@@ -112,6 +112,7 @@ input[type="checkbox"]:focus-visible{outline:3px solid #3473b4;outline-offset:3p
 ['funding',1,140,'Explore funding and application costs','Check scholarships, assistantships, fellowships, financial aid, fee waivers, and any separate deadlines.'],
 ['tests',1,130,'Plan any required tests or extra steps','If needed, allow time for exam registration and scores, centralized applications, or other program-specific requirements.'],
 ['portfolio',1,120,'Prepare portfolio or audition materials','If required, confirm sample formats, evaluation criteria, and any early audition or submission dates.',null,'creative'],
+['sample',2,125,'Prepare any required research or writing sample','Check the length, format, and topic requirements. Select strong work, allow time to revise, and request feedback if helpful.',null,'research'],
 ['cv',2,115,'Update your résumé or CV and have it reviewed','Highlight relevant experience, projects, and accomplishments. Ask a career coach or trusted reviewer for feedback before sharing it with recommenders.','cv'],
 ['request',2,85,'Identify and request recommenders','Choose people who know your work well. Aim for 6–8 weeks or more of notice; share your program list, goals, résumé/CV, and instructions.','recommenders'],
 ['statement',2,75,'Draft your personal statement and have it reviewed','Follow each program’s prompt and tailor your examples. Get feedback from a mentor, career coach, or Writing Center, then revise.','statement'],
@@ -121,12 +122,25 @@ input[type="checkbox"]:focus-visible{outline:3px solid #3473b4;outline-offset:3p
 ['after',4,-21,'Prepare for interviews and decisions','Practice if interviews are required. Compare offers, funding, and response deadlines.']
 ].map(([id,phase,offset,title,detail,started,kind])=>({id,phase,offset,title,detail,started,kind}));
 let custom=saved.custom||{},excluded=new Set(Array.isArray(saved.excluded)?saved.excluded:[]);
+// Keep any choices made in older versions while applying new program suggestions.
+let manualChoices=new Set(Array.isArray(saved.manualChoices)?saved.manualChoices:(Array.isArray(saved.excluded)?saved.excluded:[]));
 let addedTasks=Array.isArray(saved.addedTasks)?saved.addedTasks.filter(t=>t&&typeof t.id==='string'&&typeof t.title==='string'&&t.isCustom):[];
 const iso=d=>d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'):'';
-function data(){return{kind:$('kind').value,deadline:$('deadline').value,started:select('started'),notes:$('notes').value,done,custom,excluded:[...excluded],addedTasks,generated:true}}function save(){localStorage.setItem(key,JSON.stringify(data()))}
+function data(){return{kind:$('kind').value,deadline:$('deadline').value,started:select('started'),notes:$('notes').value,done,custom,excluded:[...excluded],manualChoices:[...manualChoices],addedTasks,generated:true}}function save(){localStorage.setItem(key,JSON.stringify(data()))}
 ['started'].forEach(id=>$(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const active=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-pressed',String(!active))}));
-function availableTasks(c){return tasks.filter(t=>!t.kind||t.kind===c.kind).concat(addedTasks)}
+const typeGuidance={
+ masters:{programs:'Compare courses, practical learning opportunities, format, cost, career outcomes, and any required prerequisites.',faculty:'If useful, ask a program director or faculty member about curriculum and fit. Check whether the program welcomes outreach first.',requirements:'Track each program’s deadlines, prerequisite courses, essays, letters, transcripts, tests (if any), and application fees.'},
+ research:{programs:'Compare faculty research interests, advising arrangements, academic fit, funding, and graduate outcomes.',faculty:'Where outreach is welcomed, ask about research fit, advising capacity, and mentoring. Follow each program’s guidance; contacting faculty is not always expected.',requirements:'Check research statements, samples, letters, testing policies, adviser expectations, and any separate assistantship or funding deadlines.',funding:'Check assistantships, stipends, fellowships, tuition coverage, and funding application deadlines.',cv:'Update your academic CV and have it reviewed. Highlight research, teaching, presentations, publications, or other relevant experience before sending it to recommenders.',request:'Ask people who can speak to your academic or research strengths. Share your CV, interests, program list, and instructions well ahead of each deadline.',statement:'Follow the statement-of-purpose or research-interest prompt. Explain your preparation and fit with each program, then get feedback and revise.',after:'Prepare for any faculty or admissions interviews. Compare advising fit, funding details, and decision deadlines.'},
+ professional:{programs:'Compare training, accreditation or licensure fit where relevant, required experience, program cost, and graduate outcomes.',faculty:'Faculty outreach may not be useful for every professional program. When appropriate, contact admissions staff, students, or faculty to learn about fit.',requirements:'Confirm prerequisite courses or experience, required tests, essays, application services, and each school’s separate deadlines.',funding:'Check scholarships, financial aid, fee assistance, and any separate funding deadlines; compare total program costs.',tests:'If required, schedule admission tests early enough for results and retakes. Check for centralized application services and processing time.',request:'Request letters that show your preparation and readiness for this field. Share your résumé/CV, program list, goals, and submission instructions.',statement:'Follow each school’s essay or personal statement prompt. Use concrete experiences, get feedback, and revise for each application.',records:'Check when official transcripts must arrive, including any centralized application service processing.',after:'Prepare for any interviews or additional application stages. Compare offers, funding, and response deadlines.'},
+ creative:{programs:'Compare mentorship, creative direction, facilities, program culture, funding, and portfolio or audition expectations.',faculty:'Where encouraged, ask faculty about mentorship, artistic direction, and program fit. Follow program-specific contact guidance.',requirements:'Track statement, portfolio, audition, writing or work samples, recommendations, and any separate early deadlines.',portfolio:'Start early if a portfolio or audition is required. Check specifications, selection criteria, submission format, and review dates.',statement:'Follow each program’s statement or artist-statement prompt. Explain your work and direction, then get feedback and revise.',after:'Prepare for possible auditions or interviews and compare mentorship, financial support, and decision deadlines.'},
+ unsure:{programs:'Explore programs that connect to your interests and goals. Compare coursework, costs, experiences, outcomes, and fit before narrowing down.',faculty:'Informational conversations with faculty or program staff can help you explore. Check whether outreach is welcomed.'}
+};
+const typeTitles={research:{statement:'Draft your statement of purpose and have it reviewed'},professional:{statement:'Draft application essays and have them reviewed'},creative:{statement:'Draft required statements and have them reviewed'}};
+const typeOffsets={research:{faculty:195,sample:125,funding:155},professional:{tests:170,requirements:160},creative:{portfolio:180,faculty:185}};
+function availableTasks(c){return tasks.filter(t=>!t.kind||t.kind===c.kind).map(t=>({...t,detail:typeGuidance[c.kind]?.[t.id]||t.detail,title:typeTitles[c.kind]?.[t.id]||t.title,offset:typeOffsets[c.kind]?.[t.id]??t.offset})).concat(addedTasks)}
 function getTasks(c){return availableTasks(c).filter(t=>!excluded.has(t.id))}
+function recommended(t,c){if(t.isCustom)return true;if(t.started&&c.started.includes(t.started))return true;if(t.id==='faculty')return c.kind==='research'||c.kind==='creative';if(t.id==='tests')return c.kind==='professional';return true}
+function applyRecommendations(){const c=data();for(const t of availableTasks(c)){if(manualChoices.has(t.id))continue;if(recommended(t,c))excluded.delete(t.id);else excluded.add(t.id)}save()}
 function renderChooser(){
  const c=data(),names=['Explore and compare','Choose and organize','Prepare materials','Review and submit','After applying'];
  $('picksteps').innerHTML=names.map((name,i)=>{const group=availableTasks(c).filter(t=>t.phase===i);if(!group.length)return '';return '<section class="pickgroup" aria-label="'+esc(name)+'"><h3 class="pickhead">'+esc(name)+'</h3><div class="picklist">'+group.map(t=>'<label class="pickrow"><input type="checkbox" data-pick="'+t.id+'" '+(!excluded.has(t.id)?'checked':'')+'><span>'+esc(t.title)+(t.started&&c.started.includes(t.started)?'<span class="started-note">✓ Started</span>':'')+'</span></label>').join('')+'</div></section>'}).join('');
@@ -139,7 +153,7 @@ function suggested(t,d){
  const c=data();
  // Without a deadline, offer modest starter targets without inventing a submission date.
  if(!d){
-  const starterDays={programs:7,faculty:21,requirements:28,funding:35,tests:35,portfolio:42,cv:42};
+  const starterDays={programs:7,faculty:21,requirements:28,funding:35,tests:35,portfolio:42,cv:42,sample:49};
   if(starterDays[t.id]===undefined)return null;
   const started=t.started&&c.started.includes(t.started);
   return add(today,started?Math.min(14,starterDays[t.id]):starterDays[t.id]);
@@ -147,29 +161,38 @@ function suggested(t,d){
  const daysLeft=daySpan(today,d);
  if(daysLeft<0)return null;
  if(t.offset<0)return add(d,-t.offset);
- // Keep the usual preparation targets when there is plenty of time. As the
- // deadline approaches, blend into a compressed plan spread across the runway.
- const idealDay=Math.max(0,daysLeft-t.offset);
- const positions={programs:.02,faculty:.075,requirements:.11,funding:.14,tests:.17,portfolio:.19,cv:.20,request:.27,statement:.42,records:.63,submit:.93};
- const fraction=positions[t.id]??Math.max(0,Math.min(.93,(210-t.offset)/200));
- const compressedDay=Math.round(daysLeft*fraction);
- const compression=Math.max(0,Math.min(1,(210-daysLeft)/120));
- let day=Math.round(idealDay*(1-compression)+compressedDay*compression);
- // Short application windows need early action on time-sensitive documents.
- if(daysLeft<75){
-  const urgent={requirements:0,funding:1,tests:1,cv:2,request:3};
-  if(urgent[t.id]!==undefined)day=Math.min(day,Math.round(urgent[t.id]*(daysLeft<30?.5:1)));
- }
- // Progress from the first screen matters: finish work already underway sooner.
- if(t.started&&c.started.includes(t.started)&&!done[t.id])day=Math.min(day,daysLeft<45?3:daysLeft<210?14:30);
- const buffer=t.id==='submit'?(daysLeft>14?7:daysLeft>5?2:Math.max(0,daysLeft-1)):(daysLeft>10?2:daysLeft>1?1:0);
- const proposed=add(today,Math.max(0,Math.min(day,daysLeft-buffer)));
- // Submission targets need a little extra room for portal problems and office closures.
- if(t.id==='submit'&&proposed>today){
+ // A submission buffer scales down on short timelines. It is not an official deadline.
+ const buffer=daysLeft>45?7:daysLeft>21?5:daysLeft>10?3:daysLeft>5?2:Math.max(0,daysLeft-1);
+ const windowDays=Math.max(0,daysLeft-buffer);
+ if(t.id==='submit'){
+  const proposed=add(today,windowDays);
   if(proposed.getDay()===6)proposed.setDate(proposed.getDate()-1);
   if(proposed.getDay()===0)proposed.setDate(proposed.getDate()-2);
+  return proposed>=today?proposed:new Date(today);
  }
- return proposed;
+ // Progression over the available time gives each step a meaningful target,
+ // including when the traditional preparation window has already passed.
+ const positions={programs:.04,requirements:.10,funding:.16,tests:.22,cv:.29,request:.36,faculty:c.kind==='research'?.15:.43,portfolio:.34,sample:.40,statement:.62,records:.80};
+ const compression=Math.max(0,Math.min(1,(210-daysLeft)/150));
+ const preSubmit=getTasks(c).filter(x=>!x.isCustom&&x.offset>=0&&x.id!=='submit');
+ const items=preSubmit.map(x=>{
+  const standard=Math.max(0,daysLeft-x.offset);
+  const paced=Math.round(windowDays*(positions[x.id]??.5));
+  let preferred=Math.round(standard*(1-compression)+paced*compression);
+  if(x.started&&c.started.includes(x.started)&&!done[x.id])preferred=Math.min(preferred,Math.round(windowDays*.18));
+  return {id:x.id,offset:x.offset,preferred:Math.max(0,Math.min(windowDays,preferred))};
+ }).sort((a,b)=>a.preferred-b.preferred||b.offset-a.offset);
+ // For shorter runways, keep separate target days whenever the calendar permits.
+ const maxPreDay=Math.max(0,windowDays-(getTasks(c).some(x=>x.id==='submit')?1:0));
+ const gap=daysLeft<150&&items.length>1?(maxPreDay>=2*(items.length-1)&&daysLeft>=30?2:maxPreDay>=items.length-1?1:0):0;
+ let previous=-gap;
+ for(let i=0;i<items.length;i++){
+  const latest=Math.max(0,maxPreDay-gap*(items.length-1-i));
+  const earliest=i*gap;
+  items[i].day=gap?Math.max(previous+gap,Math.max(earliest,Math.min(latest,items[i].preferred))):Math.min(maxPreDay,items[i].preferred);
+  previous=items[i].day;
+ }
+ return add(today,items.find(x=>x.id===t.id)?.day??0);
 }
 function target(t,d){return date(custom[t.id])||suggested(t,d)}
 function relative(t){if(t.isCustom)return 'Choose your own date';if(t.offset<0)return 'After applying';if(t.offset<=7)return '1 week before the deadline';if(t.offset<30)return '2–4 weeks before';const m=Math.round(t.offset/30);return 'About '+m+' month'+(m===1?'':'s')+' before the deadline'}
@@ -184,8 +207,8 @@ function timeline(c,d,a){
    return '<div class="timeline-row '+(done[t.id]?'completed':'')+'"><div><strong>'+esc(t.title)+'</strong><span class="suggestion">'+esc(suggestion)+(wasChanged?' · Your adjusted target':'')+'</span>'+(t.started&&c.started.includes(t.started)?'<span class="started-note">✓ Started</span>':'')+'</div><div class="timing"><label for="due-'+t.id+'">My target date</label><input type="date" id="due-'+t.id+'" data-date="'+t.id+'" value="'+iso(due)+'"><span class="print-target print-only">'+esc(visible)+'</span></div></div>'
  }).join('')+'</section>').join('');
 }
-function render(scroll=true){const c=data(),d=date(c.deadline),days=d?daySpan(today,d):null,a=getTasks(c);$('setup').classList.add('hidden');$('choose').classList.add('hidden');$('result').classList.remove('hidden');$('planname').textContent=d?'Your plan to '+fmt(d):'Your flexible preparation plan';$('notice').textContent=!d?'No deadline yet? These starter dates help with early preparation; later application steps stay flexible until you add an estimated deadline.':days<0?'That deadline has passed. Choose a new date to see suggested target dates for your next application cycle.':days<75?'About '+days+' days until the deadline. Time-sensitive tasks are moved forward, and other targets are spread across the time remaining. Check each program’s requirements right away.':days<210?'Suggested dates are spread across the time remaining, with steps you’ve already started moved earlier. Adjust any target to fit your plans.':'Suggested dates follow the preparation sequence and begin no earlier than today. Steps you’ve started are suggested earlier; adjust any target to fit your schedule.';
-const remaining=a.filter(t=>!done[t.id]),first=remaining.filter(t=>!c.started.includes(t.started));let focus=first.filter(t=>!d||target(t,d)<=add(today,30)||t.phase<=1).slice(0,3);if(!focus.length)focus=first.slice(0,3);$('focus').innerHTML=focus.map(t=>'<li>'+esc(t.title)+'</li>').join('')||'<li>Review your applications and confirm requirements directly with each program.</li>';
+function render(scroll=true){const c=data(),d=date(c.deadline),days=d?daySpan(today,d):null,a=getTasks(c);$('setup').classList.add('hidden');$('choose').classList.add('hidden');$('result').classList.remove('hidden');$('planname').textContent=d?'Your plan to '+fmt(d):'Your flexible preparation plan';$('notice').textContent=!d?'No deadline yet? These starter dates help with early preparation; later application steps stay flexible until you add an estimated deadline.':days<0?'That deadline has passed. Choose a new date to see suggested target dates for your next application cycle.':days<14?'With '+days+' days until your deadline, some steps may need to happen in parallel. Use these flexible targets and confirm program requirements right away.':days<75?'About '+days+' days until the deadline. Suggested targets are spaced across the time remaining, with time-sensitive work early. Check each program’s requirements right away.':days<210?'Suggested dates are spread across the time remaining, with steps you’ve already started moved earlier. Adjust any target to fit your plans.':'Suggested dates follow the preparation sequence and begin no earlier than today. Steps you’ve started are suggested earlier; adjust any target to fit your schedule.';
+const remaining=a.filter(t=>!done[t.id]),first=remaining.filter(t=>!c.started.includes(t.started)).sort((x,y)=>{const dx=target(x,d),dy=target(y,d);return dx&&dy?dx-dy:dx?-1:dy?1:y.offset-x.offset});let focus=first.filter(t=>!d||target(t,d)<=add(today,30)||t.phase<=1).slice(0,3);if(!focus.length)focus=first.slice(0,3);$('focus').innerHTML=focus.map(t=>'<li>'+esc(t.title)+'</li>').join('')||'<li>Review your applications and confirm requirements directly with each program.</li>';
 const groups=[['Explore and compare','Understand your options'],['Choose and organize','Know what each program needs'],['Prepare materials','Leave time to revise'],['Review and submit','Double-check the details'],['After applying','Prepare for decisions'],['My added steps','Your personal tasks']];$('phases').innerHTML=groups.map(([name,sub],i)=>{const ts=a.filter(t=>t.phase===i);if(!ts.length)return '';return '<details class="phase" '+(i===0||i===2&&days!==null&&days<100?'open':'')+'><summary><span>'+name+'<span class="sub">'+sub+' · '+ts.filter(t=>done[t.id]).length+'/'+ts.length+' done</span></span></summary><div class="tasks">'+ts.map(t=>{const dt=target(t,d);return '<div class="task '+(done[t.id]?'done':'')+'"><input aria-label="Complete '+esc(t.title)+'" type="checkbox" data-id="'+t.id+'" id="t-'+t.id+'" '+(done[t.id]?'checked':'')+'><label for="t-'+t.id+'"><strong>'+esc(t.title)+'</strong><small>'+esc(t.detail)+(c.started.includes(t.started)?' <em>(Already started)</em>':'')+'</small></label>'+(dt?'<span class="date">'+fmt(dt)+'</span>':'')+'</div>'}).join('')+'</div></details>'}).join('');
 timeline(c,d,a);const n=a.filter(t=>done[t.id]).length;$('count').textContent=n+' of '+a.length+' steps complete';$('bar').style.width=n/a.length*100+'%';$('printMeta').innerHTML='<span><strong>Application deadline:</strong> '+(d?fmt(d):'Not set yet')+'</span><span><strong>Plan:</strong> '+n+' of '+a.length+' complete</span>';renderPrintNotes();save();if(scroll)window.scrollTo({top:0,behavior:'smooth'})}
 function renderPrintNotes(){const value=$('notes').value.trim();$('printNotes').innerHTML=value?'<strong>My notes</strong>'+esc(value):''}
@@ -193,20 +216,18 @@ $('build').onclick=()=>render();$('edit').onclick=()=>{$('setup').classList.remo
 $('timeline').addEventListener('change',e=>{const id=e.target.dataset.date;if(!id)return;const value=e.target.value;const t=availableTasks(data()).find(x=>x.id===id);if(!t)return;const rec=suggested(t,date($('deadline').value));if(!value||rec&&value===iso(rec))delete custom[id];else custom[id]=value;render(false)});
 $('defaults').addEventListener('click',()=>{if(!Object.keys(custom).length)return;if(confirm('Restore all recommended dates? Your completed steps and notes will stay saved.')){custom={};render(false)}});
 function chooseFromAnswers(){
- // A step newly marked "started" on the first screen is included on the next screen.
- // This does not mark it completed.
- const startedNow=new Set(select('started'));
- for(const t of tasks)if(t.started&&startedNow.has(t.started))excluded.delete(t.id);
+ // Program type sets the initial recommendations; any student checkbox choices win.
+ applyRecommendations();
  openChooser();
 }
 $('build').onclick=chooseFromAnswers;
 $('editsteps').onclick=openChooser;
 $('backsetup').onclick=()=>{$('choose').classList.add('hidden');$('setup').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})};
 $('finish').onclick=()=>{if(!getTasks(data()).length){$('chooseerror').classList.remove('hidden');return}render()};
-function setIncluded(e){const id=e.target.dataset.pick;if(!id)return;if(e.target.checked)excluded.delete(id);else excluded.add(id);$('chooseerror').classList.add('hidden');save()}
+function setIncluded(e){const id=e.target.dataset.pick;if(!id)return;manualChoices.add(id);if(e.target.checked)excluded.delete(id);else excluded.add(id);$('chooseerror').classList.add('hidden');save()}
 $('picksteps').addEventListener('change',setIncluded);
 $('customsteps').addEventListener('change',setIncluded);
-$('customsteps').addEventListener('click',e=>{const b=e.target.closest('[data-remove]');if(!b)return;const id=b.dataset.remove;addedTasks=addedTasks.filter(t=>t.id!==id);excluded.delete(id);delete custom[id];delete done[id];renderChooser();save()});
+$('customsteps').addEventListener('click',e=>{const b=e.target.closest('[data-remove]');if(!b)return;const id=b.dataset.remove;addedTasks=addedTasks.filter(t=>t.id!==id);excluded.delete(id);manualChoices.delete(id);delete custom[id];delete done[id];renderChooser();save()});
 function addStep(){const title=$('newstep').value.trim().replace(/\s+/g,' ');if(!title){$('newstep').focus();return}const id='own'+Date.now()+'_'+Math.floor(Math.random()*1000000);addedTasks.push({id,phase:5,offset:0,title,detail:'Your own step. Choose a target date on your timeline.',isCustom:true});$('newstep').value='';renderChooser();save();$('newstep').focus()}
 $('addstep').onclick=addStep;
 $('newstep').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addStep()}});
