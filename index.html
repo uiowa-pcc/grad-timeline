@@ -75,8 +75,13 @@ input[type="checkbox"]:focus-visible{outline:3px solid #3473b4;outline-offset:3p
   details[open]>summary{border-bottom:1px solid #e4e4df}
   details summary:hover{background:#eeeee9}
   details summary:focus-visible{outline:3px solid #577fc1;outline-offset:-3px}
-  .pickgroup{background:var(--soft);border-color:var(--line)}
-  .pickgroup .picklist{background:#fff;border-top:0}
+  .picksteps{gap:9px;margin-top:16px}
+  .pickgroup{background:#fff;border-color:var(--line);border-radius:8px;overflow:hidden}
+  .pickhead{display:flex;align-items:center;gap:9px;background:var(--soft);border-bottom:1px solid #e4e4df;margin:0;padding:7px 12px;font-size:14px;line-height:1.3;font-weight:750}
+  .pickhead::before{content:"";display:block;width:3px;height:17px;flex:0 0 3px;background:var(--gold);border-radius:3px}
+  .pickgroup .picklist{background:#fff;border-top:0;padding:2px 13px 5px}
+  .pickrow{align-items:center;gap:10px;padding:7px 0;font-size:14px;line-height:1.35}
+  .pickrow input{margin-top:0}
   .pickrow:not(:last-child),.task{border-color:#ecebe5}
   .timeline{border-left-color:#deddd5}
   .timeline-month::before{border-color:var(--ink)}
@@ -102,7 +107,7 @@ input[type="checkbox"]:focus-visible{outline:3px solid #3473b4;outline-offset:3p
 <script>
 (()=>{const $=id=>document.getElementById(id),key='grad-plan-ui-v1';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch{}let done=saved.done||{};const today=new Date();today.setHours(12,0,0,0);const select=id=>[...$(id).querySelectorAll('[aria-pressed=true]')].map(x=>x.dataset.v);const date=s=>s?new Date(s+'T12:00:00'):null;const add=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};const fmt=d=>d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const tasks=[
 ['programs',0,210,'Find, compare, and narrow down programs','Think about your goals and what matters to you. Compare curriculum, cost, funding, format, outcomes, and accreditation or licensure fit; build a realistic shortlist.','programs'],
-['faculty',0,175,'Explore research and faculty fit','Read faculty work. Check whether contacting prospective advisors before applying is expected, and reach out if appropriate.',null,'research'],
+['faculty',0,175,'Contact program faculty for informational interviews','For programs of interest, consider requesting a brief conversation about curriculum, research, mentoring, or program fit. Check program guidance first; faculty outreach is not expected everywhere.'],
 ['requirements',1,145,'Check requirements and deadlines','For each program, track the deadline, essays, letters, transcripts, tests, fees, and any separate funding application.','requirements'],
 ['funding',1,140,'Explore funding and application costs','Check scholarships, assistantships, fellowships, financial aid, fee waivers, and any separate deadlines.'],
 ['tests',1,130,'Plan any required tests or extra steps','If needed, allow time for exam registration and scores, centralized applications, or other program-specific requirements.'],
@@ -124,7 +129,7 @@ function availableTasks(c){return tasks.filter(t=>!t.kind||t.kind===c.kind).conc
 function getTasks(c){return availableTasks(c).filter(t=>!excluded.has(t.id))}
 function renderChooser(){
  const c=data(),names=['Explore and compare','Choose and organize','Prepare materials','Review and submit','After applying'];
- $('picksteps').innerHTML=names.map((name,i)=>{const group=availableTasks(c).filter(t=>t.phase===i);if(!group.length)return '';return '<details class="pickgroup" '+(i===0?'open':'')+'><summary><span>'+esc(name)+'<span class="sub">'+group.length+' suggested '+(group.length===1?'step':'steps')+'</span></span></summary><div class="picklist">'+group.map(t=>'<label class="pickrow"><input type="checkbox" data-pick="'+t.id+'" '+(!excluded.has(t.id)?'checked':'')+'><span>'+esc(t.title)+(t.started&&c.started.includes(t.started)?'<span class="started-note">✓ Started</span>':'')+'</span></label>').join('')+'</div></details>'}).join('');
+ $('picksteps').innerHTML=names.map((name,i)=>{const group=availableTasks(c).filter(t=>t.phase===i);if(!group.length)return '';return '<section class="pickgroup" aria-label="'+esc(name)+'"><h3 class="pickhead">'+esc(name)+'</h3><div class="picklist">'+group.map(t=>'<label class="pickrow"><input type="checkbox" data-pick="'+t.id+'" '+(!excluded.has(t.id)?'checked':'')+'><span>'+esc(t.title)+(t.started&&c.started.includes(t.started)?'<span class="started-note">✓ Started</span>':'')+'</span></label>').join('')+'</div></section>'}).join('');
  $('customsteps').innerHTML=addedTasks.map(t=>'<div class="ownstep"><input type="checkbox" aria-label="Include '+esc(t.title)+'" data-pick="'+t.id+'" '+(!excluded.has(t.id)?'checked':'')+'><label>'+esc(t.title)+'</label><button type="button" class="remove-step" data-remove="'+t.id+'" aria-label="Remove '+esc(t.title)+'">Remove</button></div>').join('');
  $('chooseerror').classList.add('hidden');
 }
