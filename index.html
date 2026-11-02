@@ -125,7 +125,7 @@ input[type="checkbox"]:focus-visible{outline:3px solid #3473b4;outline-offset:3p
 <div class="card resourcecard"><h3>Helpful resources when you're ready</h3><div class="resources"><a href="https://careers.uiowa.edu/career-prep/graduate-professional-school" target="_blank" rel="noopener">UIowa grad school guide ↗</a><a href="https://careers.uiowa.edu/resumes-cover-letters/curriculum-vitae-cv" target="_blank" rel="noopener">CV guidance ↗</a><a href="https://writingcenter.uiowa.edu/" target="_blank" rel="noopener">UI Writing Center ↗</a><a href="https://career.berkeley.edu/get-into-grad-school/graduate-school/grad-school-letters-of-recommendation/" target="_blank" rel="noopener">Recommendation tips ↗</a></div><p class="fine">Planning targets are flexible, not official deadlines. Verify each program's application, funding, testing, and document requirements. This tool is part of your Learning Hub preparation; your entries are stored only in this browser, not submitted as an ICON assignment or sent to the Career Center.</p></div></section></main>
 <script>
 (()=>{const $=id=>document.getElementById(id),key='grad-plan-ui-v1';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch{}let done=saved.done||{};const today=new Date();today.setHours(12,0,0,0);const select=id=>[...$(id).querySelectorAll('[aria-pressed=true]')].map(x=>x.dataset.v);const date=s=>s?new Date(s+'T12:00:00'):null;const add=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};const daySpan=(a,b)=>Math.round((Date.UTC(b.getFullYear(),b.getMonth(),b.getDate())-Date.UTC(a.getFullYear(),a.getMonth(),a.getDate()))/86400000);const fmt=d=>d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const tasks=[
-['programs',0,210,'Find, compare, and narrow down programs','Think about your goals and what matters to you. Compare curriculum, cost, funding, format, outcomes, and accreditation or licensure fit; build a realistic shortlist.','programs'],
+['programs',0,210,'Find, compare, and narrow down programs','Compare curriculum, cost, funding, format, and outcomes. Consider information sessions, campus visits, or conversations with current students and alumni to learn more.','programs'],
 ['faculty',0,175,'Contact program faculty for informational interviews','For programs of interest, consider requesting a brief conversation about curriculum, research, mentoring, or program fit. Check program guidance first; faculty outreach is not expected everywhere.'],
 ['requirements',1,145,'Check requirements and deadlines','For each program, track the deadline, essays, letters, transcripts, tests, fees, and any separate funding application.','requirements'],
 ['funding',1,140,'Explore funding and application costs','Check scholarships, assistantships, fellowships, financial aid, fee waivers, and any separate deadlines.'],
@@ -136,9 +136,9 @@ input[type="checkbox"]:focus-visible{outline:3px solid #3473b4;outline-offset:3p
 ['request',2,85,'Identify and request recommenders','Choose people who know your work well. Aim for 6–8 weeks or more of notice; share your program list, goals, résumé/CV, and instructions.','recommenders'],
 ['statement',2,75,'Draft your personal statement and have it reviewed','Follow each program’s prompt and tailor your examples. Get feedback from a mentor, career coach, or Writing Center, then revise.','statement'],
 ['records',2,45,'Request transcripts','Check whether each program needs official or unofficial transcripts and allow time for delivery.'],
-['submit',3,10,'Review and submit applications','Check each prompt, document, fee, recommendation status, and portal. Submit early, then save confirmations.'],
+['submit',3,10,'Review and submit applications','Check each prompt, document, fee, and recommendation status. When possible, ask a career coach, faculty member, or trusted mentor to review your complete application before submitting. Submit early and save confirmations.'],
 ['parallel',4,-7,'Talk through parallel plans with a coach or mentor','After submitting, discuss work, experience, or other meaningful options while you await decisions.'],
-['after',4,-21,'Prepare for interviews and decisions','Practice if interviews are required. Compare offers, funding, and response deadlines.']
+['after',4,-21,'Prepare for interviews and decisions','Prepare for interviews, campus visits, and possible waitlists. Continue exploring funding; compare offers and response deadlines.']
 ].map(([id,phase,offset,title,detail,started,kind])=>({id,phase,offset,title,detail,started,kind}));
 let custom=saved.custom||{},excluded=new Set(Array.isArray(saved.excluded)?saved.excluded:[]);
 // Keep any choices made in older versions while applying new program suggestions.
@@ -156,7 +156,11 @@ const typeGuidance={
 };
 const typeTitles={research:{statement:'Draft your statement of purpose and have it reviewed'},professional:{statement:'Draft application essays and have them reviewed'},creative:{statement:'Draft required statements and have them reviewed'}};
 const typeOffsets={research:{faculty:195,sample:125,funding:155},professional:{tests:170,requirements:160},creative:{portfolio:180,faculty:185}};
-function availableTasks(c){return tasks.filter(t=>!t.kind||t.kind===c.kind).map(t=>({...t,detail:typeGuidance[c.kind]?.[t.id]||t.detail,title:typeTitles[c.kind]?.[t.id]||t.title,offset:typeOffsets[c.kind]?.[t.id]??t.offset})).concat(addedTasks)}
+function availableTasks(c){return tasks.filter(t=>!t.kind||t.kind===c.kind).map(t=>{
+ const tailored=typeGuidance[c.kind]?.[t.id],base=tailored||t.detail;
+ const extra=t.id==='programs'&&tailored?' Consider information sessions, campus visits, or conversations with current students and alumni.':t.id==='after'&&tailored?' Consider campus visits, possible waitlists, and continued funding research.':'';
+ return {...t,detail:base+extra,title:typeTitles[c.kind]?.[t.id]||t.title,offset:typeOffsets[c.kind]?.[t.id]??t.offset};
+}).concat(addedTasks)}
 function getTasks(c){return availableTasks(c).filter(t=>!excluded.has(t.id))}
 function recommended(t,c){if(t.isCustom)return true;if(t.started&&c.started.includes(t.started))return true;if(t.id==='faculty')return c.kind==='research'||c.kind==='creative';if(t.id==='tests')return ['masters','research','professional'].includes(c.kind);return true}
 function applyRecommendations(){const c=data();for(const t of availableTasks(c)){if(manualChoices.has(t.id))continue;if(recommended(t,c))excluded.delete(t.id);else excluded.add(t.id)}save()}
@@ -217,9 +221,14 @@ function target(t,d){return date(custom[t.id])||suggested(t,d)}
 function relative(t){if(t.isCustom)return 'Choose your own date';if(t.offset<0)return 'After applying';if(t.offset<=7)return '1 week before the deadline';if(t.offset<30)return '2–4 weeks before';const m=Math.round(t.offset/30);return 'About '+m+' month'+(m===1?'':'s')+' before the deadline'}
 function shortTip(t,c){
  if(t.isCustom)return '';
+ if(t.id==='programs'){
+  const focus={masters:'courses, practical experiences, and costs',research:'research fit, funding, and outcomes',professional:'training fit, costs, and outcomes',creative:'mentorship, program culture, and funding',unsure:'interests, format, and costs'}[c.kind]||'program fit and costs';
+  return 'Compare '+focus+'; explore information sessions, visits, or student/alumni conversations.';
+ }
  if(t.id==='cv')return c.kind==='research'?'Include relevant research and have your CV reviewed before sharing it with recommenders.':'Have your résumé or CV reviewed before sharing it with recommenders.';
  if(t.id==='request')return 'Ask early; share your goals, résumé/CV, deadlines, and instructions.';
- if(t.id==='submit')return 'Double-check materials, submit early, and save confirmations.';
+ if(t.id==='submit')return 'Ask a coach, faculty member, or trusted mentor to review your complete application; submit early.';
+ if(t.id==='after')return c.kind==='creative'?'Prepare for auditions, interviews, visits, and possible waitlists; revisit funding.':'Prepare for interviews, visits, and possible waitlists; revisit funding and decisions.';
  return t.detail.match(/^[^.!?]+[.!?]/)?.[0]||t.detail;
 }
 function timeline(c,d,a){
